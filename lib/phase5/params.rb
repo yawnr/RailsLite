@@ -36,11 +36,11 @@ module Phase5
     # { "user" => { "address" => { "street" => "main", "zip" => "89436" } } }
     def parse_www_encoded_form(www_encoded_form)
       keys_vals = URI::decode_www_form(www_encoded_form)
-
       params_hash = {}
+      dummy_hash = params_hash
 
       keys_vals.each do |pair|
-        params_hash[pair.first.to_s] = pair.last.to_s
+        params_hash[pair.first] = pair.last
       end
 
       params_hash
@@ -49,6 +49,7 @@ module Phase5
     # this should return an array
     # user[address][street] should return ['user', 'address', 'street']
     def parse_key(key)
+      key.split(/\]\[|\[|\]/)
     end
   end
 end
