@@ -35,15 +35,24 @@ module Phase5
     # should return
     # { "user" => { "address" => { "street" => "main", "zip" => "89436" } } }
     def parse_www_encoded_form(www_encoded_form)
-      keys_vals = URI::decode_www_form(www_encoded_form)
-      params_hash = {}
-      dummy_hash = params_hash
+      params = {}
 
-      keys_vals.each do |pair|
-        params_hash[pair.first] = pair.last
+      keys_and_values = URI.decode_www_form(www_encoded_form)
+      keys_and_values.each do |full_key, value|
+        scope = params
+
+        key_seq = parse_key(full_key)
+        key_seq.each do |key|
+          if key_seq.last == key
+            scope[key] = value
+          else
+            scope[key] ||= {}
+            scope = scope[key]
+          end
+        end
       end
 
-      params_hash
+      params
     end
 
     # this should return an array
