@@ -38,12 +38,12 @@ module Phase5
       params = {}
 
       keys_and_values = URI.decode_www_form(www_encoded_form)
-      keys_and_values.each do |full_key, value|
+      keys_and_values.each do |nested_keys, value|
         scope = params
 
-        key_seq = parse_key(full_key)
-        key_seq.each do |key|
-          if key_seq.last == key
+        keys = parse_key(nested_keys)
+        keys.each do |key|
+          if keys.last == key
             scope[key] = value
           else
             scope[key] ||= {}
